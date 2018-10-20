@@ -4,11 +4,11 @@ import {
 } from '../../actions/auth';
 
 test('should generate login object', () => {
-  const uid = 'abc123';
-  const action = login(uid);
+  const token = 'abc123';
+  const action = login(token);
   expect(action).toEqual({
     type: 'LOGIN',
-    uid
+    token
   });
 });
 

@@ -10,16 +10,49 @@ exports[`should render LoginPage 1`] = `
     <h1
       className="box-layout__title"
     >
-      Boilerplate
+      LOGIN
     </h1>
-    <p>
-      Tag line for app.
-    </p>
-    <button
-      className="button"
+    <form
+      onSubmit={[Function]}
     >
-      Login with Google
-    </button>
+      <label
+        htmlFor="email"
+      >
+        Email: 
+      </label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+      />
+      <label
+        htmlFor="password"
+      >
+        Password:
+      </label>
+      <input
+        id="password"
+        name="password"
+        type="password"
+      />
+      <br />
+      <input
+        className="button"
+        id="submit"
+        name="submit"
+        type="submit"
+      />
+    </form>
+    <p>
+      New user? 
+      <Link
+        replace={false}
+        to="/signup"
+      >
+        Sign Up
+      </Link>
+      !
+    </p>
   </div>
 </div>
 `;
