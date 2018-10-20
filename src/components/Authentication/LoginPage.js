@@ -1,10 +1,28 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { login } from '../../actions/auth';
 import axios from 'axios';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+import { login } from '../../actions/auth';
 import { Link } from 'react-router-dom';
 
+
 export class LoginPage extends React.Component {
+  state = {
+    errors: []
+  }
+
+  showErrors = () => {
+    if (this.state.errors.length > 0) { 
+      return this.state.errors.map((e, index) => (
+        toast.error(e, {
+          position: toast.POSITION.TOP_LEFT
+        })
+      ))
+    }
+  }
+
   handleLogin = (e) => {
     e.preventDefault();
 
@@ -21,10 +39,15 @@ export class LoginPage extends React.Component {
       .then(() => {
         this.props.history.push('/dashboard');
       })
-      .catch((res) => {
-        console.log("Login failed");
-        console.log(res);
+      .catch(() => {
+        this.setState(() => ({
+          errors: ["Invalid username or password"]
+        }))
       });
+  }
+
+  componentDidUpdate() {
+    this.showErrors()
   }
 
   render() {
@@ -33,6 +56,8 @@ export class LoginPage extends React.Component {
         <div className="box-layout__box" >
           <h1 className="box-layout__title">LOGIN</h1>
           
+          <ToastContainer transition={Slide} hideProgressBar={true} />
+
           <form onSubmit={this.handleLogin}>
             <label htmlFor="email">Email: </label>
             <input

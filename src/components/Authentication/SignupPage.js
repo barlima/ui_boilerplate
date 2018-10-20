@@ -1,10 +1,24 @@
 import React from 'react';
 import axios from 'axios';
+import { ToastContainer, toast, Slide } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Link } from 'react-router-dom';
+
 
 export class SignupPage extends React.Component {
   state = {
     errors: []
+  }
+
+  showErrors = () => {
+    if (this.state.errors.length > 0) { 
+      return this.state.errors.map((e, index) => (
+        toast.error(e, {
+          position: toast.POSITION.TOP_LEFT
+        })
+      ))
+    }
   }
 
   handleSignup = (e) => {
@@ -24,7 +38,6 @@ export class SignupPage extends React.Component {
 
       axios.post('http://localhost:3001/api/v1/users/create', request)
         .then((res) => {
-          // Show message!
           this.setState(() => ({
             errors: []
           }));
@@ -35,15 +48,15 @@ export class SignupPage extends React.Component {
           if(data.status === 200) {
             this.props.history.push('/login');
           } else {
-            console.log(data)
             this.setState((prevState) => ({
                 errors: prevState.errors.concat(data.msg)
             }))
           }
         })
         .catch((res) => {
-          console.log("POST call failed!")
-          console.log(res);
+          this.setState(() => ({
+            errors: ['Cannot create a user']
+          }));
         });
 
     } else {
@@ -53,17 +66,17 @@ export class SignupPage extends React.Component {
     }
   }
 
+  componentDidUpdate() {
+    this.showErrors();
+  }
+
   render() {
     return (
       <div className="box-layout">
         <div className="box-layout__box" >
           <h1 className="box-layout__title">SIGNUP</h1>
-          
-          {
-            this.state.errors.length > 0 && this.state.errors.map((e, index) => (
-              <p key={index}>{e}</p>
-            ))
-          }
+
+          <ToastContainer transition={Slide} hideProgressBar={true} />
 
           <form onSubmit={this.handleSignup}>
             <label htmlFor="email">Email: </label>
